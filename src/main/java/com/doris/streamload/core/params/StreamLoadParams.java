@@ -16,10 +16,7 @@
 // under the License.
 package com.doris.streamload.core.params;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +24,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class StreamLoadParams {
     // Public Parameter
     private String label = UUID.randomUUID().toString();
@@ -43,10 +38,14 @@ public class StreamLoadParams {
     private String mergeType = "APPEND"; // enums: APPEND、DELETE、MERGE
     private String twoPhaseCommit = "false";
     private String enableProfile = "false";
+    private String timeout = "";
 
     // JSON Parameter
     private String stripOuterArray = "false";
     private String fuzzyParse = "false";
+    private String jsonpaths = "";
+    private String readJsonByLine = "";
+    private String jsonRoot = "";
 
     // CSV Parameter
     private String columnSeparator = "\t";
@@ -54,45 +53,7 @@ public class StreamLoadParams {
     private String enclose = "";
     private String escape = "";
 
-    // CSV Constructor
-    public StreamLoadParams(String label, String format, String strictMode, String maxFilterRatio, String where, String partitions, String columns, String execMemLimit, String partialColumns, String mergeType, String twoPhaseCommit, String enableProfile, String stripOuterArray, String fuzzyParse) {
-        this.label = label;
-        this.format = format;
-        this.strictMode = strictMode;
-        this.maxFilterRatio = maxFilterRatio;
-        this.where = where;
-        this.partitions = partitions;
-        this.columns = columns;
-        this.execMemLimit = execMemLimit;
-        this.partialColumns = partialColumns;
-        this.mergeType = mergeType;
-        this.twoPhaseCommit = twoPhaseCommit;
-        this.enableProfile = enableProfile;
-        this.stripOuterArray = stripOuterArray;
-        this.fuzzyParse = fuzzyParse;
-    }
-
-    // JSON Constructor
-    public StreamLoadParams(String label, String format, String strictMode, String maxFilterRatio, String where, String partitions, String columns, String execMemLimit, String partialColumns, String mergeType, String twoPhaseCommit, String enableProfile, String columnSeparator, String lineDelimiter, String enclose, String escape) {
-        this.label = label;
-        this.format = format;
-        this.strictMode = strictMode;
-        this.maxFilterRatio = maxFilterRatio;
-        this.where = where;
-        this.partitions = partitions;
-        this.columns = columns;
-        this.execMemLimit = execMemLimit;
-        this.partialColumns = partialColumns;
-        this.mergeType = mergeType;
-        this.twoPhaseCommit = twoPhaseCommit;
-        this.enableProfile = enableProfile;
-        this.columnSeparator = columnSeparator;
-        this.lineDelimiter = lineDelimiter;
-        this.enclose = enclose;
-        this.escape = escape;
-    }
-
-    public Map<String,String> getParamMap(){
+    public Map<String, String> getParamMap() {
         HashMap<String, String> paramList = new HashMap<>();
         paramList.put("label", getLabel());
         paramList.put("format", getFormat());
@@ -106,8 +67,12 @@ public class StreamLoadParams {
         paramList.put("merge_type", getMergeType());
         paramList.put("two_phase_commit", getTwoPhaseCommit());
         paramList.put("enable_profile", getEnableProfile());
+        paramList.put("timeout", getTimeout());
         paramList.put("strip_outer_array", getStripOuterArray());
         paramList.put("fuzzy_parse", getFuzzyParse());
+        paramList.put("jsonpaths", getJsonpaths());
+        paramList.put("json_root", getJsonRoot());
+        paramList.put("read_json_by_line", getReadJsonByLine());
         paramList.put("column_separator", getColumnSeparator());
         paramList.put("line_delimiter", getLineDelimiter());
         paramList.put("enclose", getEnclose());
@@ -115,10 +80,163 @@ public class StreamLoadParams {
         return paramList;
     }
 
+    private StreamLoadParams(Builder builder) {
+        this.label = builder.label;
+        this.format = builder.format;
+        this.strictMode = builder.strictMode;
+        this.maxFilterRatio = builder.maxFilterRatio;
+        this.where = builder.where;
+        this.partitions = builder.partitions;
+        this.columns = builder.columns;
+        this.execMemLimit = builder.execMemLimit;
+        this.partialColumns = builder.partialColumns;
+        this.mergeType = builder.mergeType;
+        this.twoPhaseCommit = builder.twoPhaseCommit;
+        this.enableProfile = builder.enableProfile;
+        this.timeout = builder.timeout;
+        this.stripOuterArray = builder.stripOuterArray;
+        this.fuzzyParse = builder.fuzzyParse;
+        this.jsonpaths = builder.jsonpaths;
+        this.readJsonByLine = builder.readJsonByLine;
+        this.jsonRoot = builder.jsonRoot;
+        this.columnSeparator = builder.columnSeparator;
+        this.lineDelimiter = builder.lineDelimiter;
+        this.enclose = builder.enclose;
+        this.escape = builder.escape;
+    }
+
+    public static class Builder {
+        // Public Parameter
+        private String label = UUID.randomUUID().toString();
+        private String format = "csv"; // enums: csv,json,csv_with_names,csv_with_names_and_types,parquet,orc
+        private String strictMode = "false";
+        private String maxFilterRatio = "0";
+        private String where = "";
+        private String partitions = "";
+        private String columns = "";
+        private String execMemLimit = "2147483648";
+        private String partialColumns = "false";
+        private String mergeType = "APPEND"; // enums: APPEND、DELETE、MERGE
+        private String twoPhaseCommit = "false";
+        private String enableProfile = "false";
+        private String timeout = "";
+
+        // JSON Parameter
+        private String stripOuterArray = "false";
+        private String fuzzyParse = "false";
+        private String jsonpaths = "";
+        private String readJsonByLine = "";
+        private String jsonRoot = "";
+
+        // CSV Parameter
+        private String columnSeparator = "\t";
+        private String lineDelimiter = "\n";
+        private String enclose = "";
+        private String escape = "";
+
+        public Builder setLabel(String label){
+            this.label = label;
+            return this;
+        }
+
+        public Builder setFormat(String format){
+            this.format = format;
+            return this;
+        }
+
+        public Builder setStrictMode(String strictMode){
+            this.strictMode = strictMode;
+            return this;
+        }
+        public Builder setMaxFilterRatio(String maxFilterRatio){
+            this.maxFilterRatio = maxFilterRatio;
+            return this;
+        }
+        public Builder setWhere(String where){
+            this.where = where;
+            return this;
+        }
+        public Builder setPartitions(String partitions){
+            this.partitions = partitions;
+            return this;
+        }
+        public Builder setColumns(String columns){
+            this.columns = columns;
+            return this;
+        }
+        public Builder setExecMemLimit(String execMemLimit){
+            this.execMemLimit = execMemLimit;
+            return this;
+        }
+        public Builder setPartialColumns(String partialColumns){
+            this.partialColumns = partialColumns;
+            return this;
+        }
+        public Builder setMergeType(String mergeType){
+            this.mergeType = mergeType;
+            return this;
+        }
+
+        public Builder setTwoPhaseCommit(String twoPhaseCommit){
+            this.twoPhaseCommit = twoPhaseCommit;
+            return this;
+        }
+        public Builder setEnableProfile(String enableProfile){
+            this.enableProfile = enableProfile;
+            return this;
+        }
+        public Builder setTimeout(String timeout){
+            this.timeout = timeout;
+            return this;
+        }
+        public Builder setStripOuterArray(String stripOuterArray){
+            this.stripOuterArray = stripOuterArray;
+            return this;
+        }
+        public Builder setFuzzyParse(String fuzzyParse){
+            this.fuzzyParse = fuzzyParse;
+            return this;
+        }
+        public Builder setJsonpaths(String jsonpaths){
+            this.jsonpaths = jsonpaths;
+            return this;
+        }
+        public Builder setReadJsonByLine(String readJsonByLine){
+            this.readJsonByLine = readJsonByLine;
+            return this;
+        }
+        public Builder setJsonRoot(String jsonRoot){
+            this.jsonRoot = jsonRoot;
+            return this;
+        }
+        public Builder setColumnSeparator(String columnSeparator){
+            this.columnSeparator = columnSeparator;
+            return this;
+        }
+        public Builder setLineDelimiter(String lineDelimiter){
+            this.lineDelimiter = lineDelimiter;
+            return this;
+        }
+        public Builder setEnclose(String enclose){
+            this.enclose = enclose;
+            return this;
+        }
+        public Builder setEscape(String escape){
+            this.escape = escape;
+            return this;
+        }
+
+        public StreamLoadParams build(){
+            return new StreamLoadParams(this);
+        }
+
+    }
+
     @Override
     public String toString() {
         return "{" +
-                "format='" + format + '\'' +
+                "label='" + label + '\'' +
+                ", format='" + format + '\'' +
                 ", strictMode='" + strictMode + '\'' +
                 ", maxFilterRatio='" + maxFilterRatio + '\'' +
                 ", where='" + where + '\'' +
@@ -129,9 +247,12 @@ public class StreamLoadParams {
                 ", mergeType='" + mergeType + '\'' +
                 ", twoPhaseCommit='" + twoPhaseCommit + '\'' +
                 ", enableProfile='" + enableProfile + '\'' +
+                ", timeout='" + timeout + '\'' +
                 ", stripOuterArray='" + stripOuterArray + '\'' +
                 ", fuzzyParse='" + fuzzyParse + '\'' +
-                ", separator='" + columnSeparator + '\'' +
+                ", jsonpaths='" + jsonpaths + '\'' +
+                ", readJsonByLine='" + readJsonByLine + '\'' +
+                ", columnSeparator='" + columnSeparator + '\'' +
                 ", lineDelimiter='" + lineDelimiter + '\'' +
                 ", enclose='" + enclose + '\'' +
                 ", escape='" + escape + '\'' +

@@ -85,11 +85,11 @@ public class DataLoadServiceImpl implements DataLoadService {
         StreamLoadResult streamLoadResult = new StreamLoadResult();
         for (int i = 0; i < dataSize; i++) {
             if ((i != 0 && i % batchSize == 0) || (i + 1 == dataSize)) {
-                StreamLoadParams streamLoadParams = new StreamLoadParams();
-                streamLoadParams.setFormat("json");
-                streamLoadParams.setFuzzyParse("true");
-                streamLoadParams.setStripOuterArray("true");
-                streamLoadResult = streamLoad.run(dataList, dorisContentParams, streamLoadParams);
+                StreamLoadParams.Builder builder = new StreamLoadParams.Builder();
+                builder.setFormat("json");
+                builder.setFuzzyParse("true");
+                builder.setStripOuterArray("true");
+                streamLoadResult = streamLoad.run(dataList, dorisContentParams, builder.build());
                 dataList.clear();
                 // To temporarily view intermediate log statements, log printing should be used in formal environments,
                 // such as log4j and other components.
@@ -117,9 +117,9 @@ public class DataLoadServiceImpl implements DataLoadService {
         StreamLoadResult streamLoadResult = new StreamLoadResult();
         for (int i = 0; i < dataSize; i++) {
             if ((i != 0 && i % batchSize == 0) || (i + 1 == dataSize)) {
-                StreamLoadParams streamLoadParams = new StreamLoadParams();
-                streamLoadParams.setFormat("csv");
-                streamLoadResult = streamLoad.run(dataList, dorisContentParams, streamLoadParams);
+                StreamLoadParams.Builder builder = new StreamLoadParams.Builder();
+                builder.setFormat("csv");
+                streamLoadResult = streamLoad.run(dataList, dorisContentParams, builder.build());
                 dataList.clear();
                 // To temporarily view intermediate log statements, log printing should be used in formal environments,
                 // such as log4j and other components.

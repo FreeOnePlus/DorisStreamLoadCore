@@ -16,6 +16,7 @@
 // under the License.
 package com.doris.streamload.core;
 
+import com.doris.streamload.core.input.RecordBatchInputStream;
 import com.doris.streamload.core.params.StreamLoadParams;
 import com.doris.streamload.core.params.DorisContentParams;
 import com.doris.streamload.core.params.StreamLoadResult;

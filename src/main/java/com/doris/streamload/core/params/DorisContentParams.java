@@ -30,10 +30,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DorisContentParams {
+    // FE or BE Host
     private String host;
+    // If Host Param is FE Host, Please use fe-http-port, Default value 8030.
+    // If Host Param is BE Host, Please use be-http-port, Default value 8040.
     private int httpPort;
+    // Write to target database
     private String database;
+    // Write to target table
     private String table;
+    // Doris login username
     private String userName;
+    // Doris login password
     private String password;
 }
