@@ -108,12 +108,11 @@ public class StreamLoad {
                     dorisContentParams.getHttpPort(),
                     dorisContentParams.getDatabase(),
                     dorisContentParams.getTable()));
-            InputStream streamLoadInputStream;
             // because only support "csv" or "json" type with now.
             // Here, because inputSteam currently has certain problems importing JSON type data,
             // StringEntity is used, which will be unified in the future.
             if (streamLoadParams.getFormat().matches("csv")){
-                streamLoadInputStream = new StreamLoadInputStream(data.toString());
+                StreamLoadInputStream streamLoadInputStream = new StreamLoadInputStream(data.toString());
                 InputStreamEntity inputStreamEntity = new InputStreamEntity(streamLoadInputStream
                         ,ContentType.create("text/plain", StandardCharsets.UTF_8));
                 put.setEntity(inputStreamEntity);
