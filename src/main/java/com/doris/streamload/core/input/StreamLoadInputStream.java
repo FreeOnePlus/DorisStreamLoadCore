@@ -16,8 +16,6 @@
 // under the License.
 package com.doris.streamload.core.input;
 
-import org.apache.http.entity.StringEntity;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
