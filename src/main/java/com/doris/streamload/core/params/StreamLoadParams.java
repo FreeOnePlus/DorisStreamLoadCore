@@ -17,6 +17,8 @@
 package com.doris.streamload.core.params;
 
 import lombok.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,32 +28,32 @@ import java.util.UUID;
 @Setter
 public class StreamLoadParams {
     // Public Parameter
-    private String label = UUID.randomUUID().toString();
-    private String format = "csv"; // enums: csv,json,csv_with_names,csv_with_names_and_types,parquet,orc
-    private String strictMode = "false";
-    private String maxFilterRatio = "0";
-    private String where = "";
-    private String partitions = "";
-    private String columns = "";
-    private String execMemLimit = "2147483648";
-    private String partialColumns = "false";
-    private String mergeType = "APPEND"; // enums: APPEND、DELETE、MERGE
-    private String twoPhaseCommit = "false";
-    private String enableProfile = "false";
-    private String timeout = "";
+    private String label;
+    private String format; // enums: csv,json,csv_with_names,csv_with_names_and_types,parquet,orc
+    private String strictMode;
+    private String maxFilterRatio;
+    private String where;
+    private String partitions;
+    private String columns;
+    private String execMemLimit;
+    private String partialColumns;
+    private String mergeType; // enums: APPEND、DELETE、MERGE
+    private String twoPhaseCommit;
+    private String enableProfile;
+    private String timeout;
 
     // JSON Parameter
-    private String stripOuterArray = "false";
-    private String fuzzyParse = "false";
-    private String jsonpaths = "";
-    private String readJsonByLine = "";
-    private String jsonRoot = "";
+    private String stripOuterArray;
+    private String fuzzyParse;
+    private String jsonpaths;
+    private String readJsonByLine;
+    private String jsonRoot;
 
     // CSV Parameter
-    private String columnSeparator = "\t";
-    private String lineDelimiter = "\n";
-    private String enclose = "";
-    private String escape = "";
+    private String columnSeparator;
+    private String lineDelimiter;
+    private String enclose;
+    private String escape;
 
     public Map<String, String> getParamMap() {
         HashMap<String, String> paramList = new HashMap<>();

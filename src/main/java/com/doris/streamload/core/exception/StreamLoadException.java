@@ -14,28 +14,29 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-package com.doris.streamload.demo.conf;
+package com.doris.streamload.core.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.stereotype.Repository;
+public class StreamLoadException extends Exception {
+    public StreamLoadException() {
+        super();
+    }
 
-/**
- * This Config Bean should have all Doris Params.
- */
-@Getter
-@Setter
-@Repository
-@AllArgsConstructor
-@NoArgsConstructor
-public class DorisConfig {
-    private String host = "139.9.207.36"; // Host
-    private int httpPort = 59371; // HTTP Port
-    private String database = "demo"; // Database
-    private String table = "app_log"; // Table
-    private String username = "admin"; // Doris Username
-    private String password = "Syj123456"; // Doris Password
+    public StreamLoadException(String message) {
+        super(message);
+    }
+
+    public StreamLoadException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public StreamLoadException(Throwable cause) {
+        super(cause);
+    }
+
+    protected StreamLoadException(String message, Throwable cause,
+                                  boolean enableSuppression,
+                                  boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 }
+

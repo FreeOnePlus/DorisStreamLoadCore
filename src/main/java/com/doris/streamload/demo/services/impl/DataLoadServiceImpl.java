@@ -16,6 +16,7 @@
 // under the License.
 package com.doris.streamload.demo.services.impl;
 
+import com.doris.streamload.core.exception.StreamLoadException;
 import com.doris.streamload.demo.beans.DataBean;
 import com.doris.streamload.demo.beans.DataValueEnums;
 import com.doris.streamload.demo.conf.DorisConfig;
@@ -26,6 +27,8 @@ import com.doris.streamload.core.params.StreamLoadResult;
 import com.doris.streamload.core.StreamLoad;
 import com.doris.streamload.demo.services.DataLoadService;
 import com.doris.streamload.demo.services.impl.convertor.IConvertorImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -39,6 +42,7 @@ import java.util.Random;
 public class DataLoadServiceImpl implements DataLoadService {
     @Resource
     DorisConfig dorisConfig;
+    private static final Logger log = LoggerFactory.getLogger(DataLoadServiceImpl.class);
     private int batchSize = 100000;
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private List<DataBean> dataList = new ArrayList<>();
@@ -84,18 +88,22 @@ public class DataLoadServiceImpl implements DataLoadService {
         // and set the corresponding parameters.
         StreamLoadResult streamLoadResult = new StreamLoadResult();
         for (int i = 0; i < dataSize; i++) {
-            if ((i != 0 && i % batchSize == 0) || (i + 1 == dataSize)) {
-                StreamLoadParams.Builder builder = new StreamLoadParams.Builder();
-                builder.setFormat("json");
-                builder.setFuzzyParse("true");
-                builder.setStripOuterArray("true");
-                streamLoadResult = streamLoad.run(dataList, dorisContentParams, builder.build());
-                dataList.clear();
-                // To temporarily view intermediate log statements, log printing should be used in formal environments,
-                // such as log4j and other components.
-                System.out.println(streamLoadResult.toString());
-            }
             dataList.add(sourceData());
+            if ((i != 0 && i % batchSize == 0) || (i + 1 == dataSize)) {
+                StreamLoadParams build = new StreamLoadParams.Builder()
+                        .setFormat("json")
+                        .setFuzzyParse("true")
+                        .setStrictMode("true")
+                        .setStripOuterArray("true")
+                        .build();
+                try {
+                    streamLoadResult = streamLoad.run(dataList, dorisContentParams, build);
+                } catch (StreamLoadException e) {
+                    throw new RuntimeException(e);
+                }
+                dataList.clear();
+                log.info(streamLoadResult.toString());
+            }
         }
         long endTime = System.currentTimeMillis();
         if (!"Success".equals(streamLoadResult.getStatus())) {
@@ -116,16 +124,20 @@ public class DataLoadServiceImpl implements DataLoadService {
         // and set the corresponding parameters.
         StreamLoadResult streamLoadResult = new StreamLoadResult();
         for (int i = 0; i < dataSize; i++) {
-            if ((i != 0 && i % batchSize == 0) || (i + 1 == dataSize)) {
-                StreamLoadParams.Builder builder = new StreamLoadParams.Builder();
-                builder.setFormat("csv");
-                streamLoadResult = streamLoad.run(dataList, dorisContentParams, builder.build());
-                dataList.clear();
-                // To temporarily view intermediate log statements, log printing should be used in formal environments,
-                // such as log4j and other components.
-                System.out.println(streamLoadResult.toString());
-            }
             dataList.add(sourceData());
+            if ((i != 0 && i % batchSize == 0) || (i + 1 == dataSize)) {
+                StreamLoadParams build = new StreamLoadParams.Builder()
+                        .setFormat("csv")
+                        .setColumnSeparator(",")
+                        .build();
+                try {
+                    streamLoadResult = streamLoad.run(dataList, dorisContentParams, build);
+                } catch (StreamLoadException e) {
+                    throw new RuntimeException(e);
+                }
+                dataList.clear();
+                log.info(streamLoadResult.toString());
+            }
         }
         long endTime = System.currentTimeMillis();
         if (!"Success".equals(streamLoadResult.getStatus())) {
@@ -134,5 +146,4 @@ public class DataLoadServiceImpl implements DataLoadService {
         return String.format("All have been successfully imported, a total of %s items, " +
                 "and the cumulative time taken is %s Ms", dataSize, endTime - startTime);
     }
-
 }

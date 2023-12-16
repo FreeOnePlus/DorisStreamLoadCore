@@ -16,7 +16,8 @@
 // under the License.
 package com.doris.streamload.core;
 
-import com.doris.streamload.core.input.RecordBatchInputStream;
+import com.doris.streamload.core.exception.StreamLoadException;
+import com.doris.streamload.core.input.StreamLoadInputStream;
 import com.doris.streamload.core.params.StreamLoadParams;
 import com.doris.streamload.core.params.DorisContentParams;
 import com.doris.streamload.core.params.StreamLoadResult;
@@ -27,19 +28,25 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 @Repository
 public class StreamLoad {
+    private static final Logger log = LoggerFactory.getLogger(StreamLoad.class);
     private StreamLoadResult streamLoadResult;
     private IConvertor convertor;
     // Create HttpClientBuilder And Open 307
@@ -66,42 +73,62 @@ public class StreamLoad {
         return "Basic " + new String(encoded);
     }
 
-    public StreamLoadResult run(Object data, DorisContentParams dorisContentParams, StreamLoadParams streamLoadParams){
+    public StreamLoadResult run(Object data
+            , DorisContentParams dorisContentParams
+            , StreamLoadParams streamLoadParams) throws StreamLoadException {
+        String doLoadData;
         switch (streamLoadParams.getFormat()){
             case "csv":
-                String csv = convertor.convertorToCsv(data);
-                return doLoad(csv, dorisContentParams,streamLoadParams);
+                doLoadData = convertor.convertorToCsv(data);
+                break;
             case "csv_with_names":
-                String csvWithNames = convertor.convertorToCsvWithNames(data);
-                return doLoad(csvWithNames, dorisContentParams,streamLoadParams);
+                doLoadData = convertor.convertorToCsvWithNames(data);
+                break;
             case "csv_with_names_and_types":
-                String csvWithNamesAndTypes = convertor.convertorToCsvWithNamesAndTypes(data);
-                return doLoad(csvWithNamesAndTypes, dorisContentParams,streamLoadParams);
+                doLoadData = convertor.convertorToCsvWithNamesAndTypes(data);
+                break;
             case "json":
-                String json = convertor.convertorToJson(data);
-                return doLoad(json, dorisContentParams,streamLoadParams);
+                doLoadData = convertor.convertorToJson(data);
+                break;
             default:
                 StreamLoadResult loadResult = new StreamLoadResult();
                 loadResult.setStatus("Error");
                 loadResult.setMessage("Dont have this data format!");
                 return streamLoadResult;
         }
+        return doLoad(doLoadData, dorisContentParams,streamLoadParams);
     }
 
-    private StreamLoadResult doLoad(Object data, DorisContentParams dorisContentParams, StreamLoadParams streamLoadParams) {
+    private StreamLoadResult doLoad(Object data
+            , DorisContentParams dorisContentParams
+            , StreamLoadParams streamLoadParams) throws StreamLoadException {
         try (CloseableHttpClient client = httpClientBuilder.build()) {
             HttpPut put = new HttpPut(String.format("http://%s:%s/api/%s/%s/_stream_load",
                     dorisContentParams.getHost(),
                     dorisContentParams.getHttpPort(),
                     dorisContentParams.getDatabase(),
                     dorisContentParams.getTable()));
-            StringEntity entity = new StringEntity(data.toString(), "UTF-8");
+            InputStream streamLoadInputStream;
+            // because only support "csv" or "json" type with now.
+            // Here, because inputSteam currently has certain problems importing JSON type data,
+            // StringEntity is used, which will be unified in the future.
+            if (streamLoadParams.getFormat().matches("csv")){
+                streamLoadInputStream = new StreamLoadInputStream(data.toString());
+                InputStreamEntity inputStreamEntity = new InputStreamEntity(streamLoadInputStream
+                        ,ContentType.create("text/plain", StandardCharsets.UTF_8));
+                put.setEntity(inputStreamEntity);
+            }else if(streamLoadParams.getFormat().matches("json")){
+                put.setEntity(new StringEntity(data.toString(), "UTF-8"));
+            } else {
+                throw new StreamLoadException("This data type is not yet supported by the InputStream method.");
+            }
+
             put.setHeader(HttpHeaders.EXPECT, "100-continue");
-            put.setHeader(HttpHeaders.AUTHORIZATION, basicAuthHeader(dorisContentParams.getUserName(), dorisContentParams.getPassword()));
+            put.setHeader(HttpHeaders.AUTHORIZATION, basicAuthHeader(dorisContentParams.getUserName()
+                    , dorisContentParams.getPassword()));
             for (Map.Entry<String, String> paramsEntry : streamLoadParams.getParamMap().entrySet()) {
                 put.setHeader(paramsEntry.getKey(), paramsEntry.getValue());
             }
-            put.setEntity(entity);
 
             try (CloseableHttpResponse response = client.execute(put)) {
                 if (response.getEntity() != null) {
@@ -112,14 +139,15 @@ public class StreamLoad {
                 // statusCode 200 just indicates that doris be service is ok, not stream load
                 // you should see the output data to find whether stream load is success
                 if (statusCode != 200) {
-                    throw new IOException(
-                            String.format("Stream load failed, statusCode=%s load result=%s", statusCode, streamLoadResult.toString()));
+                    throw new StreamLoadException(
+                            String.format("Stream load failed, statusCode=%s load result=%s"
+                                    , statusCode, streamLoadResult.toString()));
                 }
             }
             return streamLoadResult;
-        } catch (IOException e) {
-            // log.Error(streamLoadResult.toString());
-            throw new RuntimeException(e);
+        } catch (IOException | StreamLoadException e) {
+            log.error(streamLoadResult.toString());
+            throw new StreamLoadException(e);
         }
     }
 }

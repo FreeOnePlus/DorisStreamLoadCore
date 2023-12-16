@@ -16,10 +16,13 @@
 // under the License.
 package com.doris.streamload.core.params;
 
+import com.doris.streamload.core.StreamLoad;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Getter
 @Setter
@@ -46,24 +49,24 @@ public class StreamLoadResult {
 
     @Override
     public String toString() {
-        return "{" +
-                "txnId=" + txnId +
-                ", label='" + label + '\'' +
-                ", twoPhaseCommit='" + twoPhaseCommit + '\'' +
-                ", status='" + status + '\'' +
-                ", message='" + message + '\'' +
-                ", numberTotalRows=" + numberTotalRows +
-                ", numberLoadedRows=" + numberLoadedRows +
-                ", numberFilteredRows=" + numberFilteredRows +
-                ", numberUnselectedRows=" + numberUnselectedRows +
-                ", loadBytes=" + loadBytes +
-                ", loadTimeMs=" + loadTimeMs +
-                ", beginTxnTimeMs=" + beginTxnTimeMs +
-                ", streamLoadPutTimeMs=" + streamLoadPutTimeMs +
-                ", readDataTimeMs=" + readDataTimeMs +
-                ", writeDataTimeMs=" + writeDataTimeMs +
-                ", commitAndPublishTimeMs=" + commitAndPublishTimeMs +
-                ", errorUrl=" + errorURL +
+        return "\n{" +
+                "txnId=" + txnId + ",\n" +
+                "label='" + label + '\'' + ",\n" +
+                "twoPhaseCommit='" + twoPhaseCommit + '\'' + ",\n" +
+                "status='" + status + '\'' + ",\n" +
+                "message='" + message + '\'' + ",\n" +
+                "numberTotalRows=" + numberTotalRows + ",\n" +
+                "numberLoadedRows=" + numberLoadedRows + ",\n" +
+                "numberFilteredRows=" + numberFilteredRows + ",\n" +
+                "numberUnselectedRows=" + numberUnselectedRows + ",\n" +
+                "loadBytes=" + loadBytes + ",\n" +
+                "loadTimeMs=" + loadTimeMs + ",\n" +
+                "beginTxnTimeMs=" + beginTxnTimeMs + ",\n" +
+                "streamLoadPutTimeMs=" + streamLoadPutTimeMs + ",\n" +
+                "readDataTimeMs=" + readDataTimeMs + ",\n" +
+                "writeDataTimeMs=" + writeDataTimeMs + ",\n" +
+                "commitAndPublishTimeMs=" + commitAndPublishTimeMs + ",\n" +
+                "errorUrl=" + errorURL + "\n" +
                 '}';
     }
 }
