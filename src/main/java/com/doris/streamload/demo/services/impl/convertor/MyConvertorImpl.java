@@ -1,7 +1,7 @@
 package com.doris.streamload.demo.services.impl.convertor;
 
+import com.doris.streamload.core.IConvertor;
 import com.doris.streamload.demo.beans.DataBean;
-import org.apache.doris.streamload.core.IConvertor;
 
 import java.util.List;
 import java.util.stream.Collectors;

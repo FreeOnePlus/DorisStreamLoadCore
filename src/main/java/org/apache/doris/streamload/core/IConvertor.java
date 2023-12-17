@@ -14,16 +14,14 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-package com.doris.streamload;
+package com.doris.streamload.core;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-@SpringBootApplication
-public class Application {
-
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
-
+/**
+ * The Convertor interface currently supports three import methods of CSV and one import method of JSON.
+ */
+public interface IConvertor {
+    String convertorToCsv(Object input);
+    String convertorToCsvWithNames(Object input);
+    String convertorToCsvWithNamesAndTypes(Object input);
+    String convertorToJson(Object input);
 }

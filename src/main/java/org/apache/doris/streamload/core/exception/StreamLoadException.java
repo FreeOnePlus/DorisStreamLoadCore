@@ -14,29 +14,29 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-package com.doris.streamload.demo.controller;
+package com.doris.streamload.core.exception;
 
-import com.doris.streamload.demo.services.DataLoadService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
-
-@RestController
-public class DataLoadController {
-    @Resource
-    DataLoadService dataLoadService;
-
-    @RequestMapping("/insert/json")
-    @ResponseBody
-    public String insertJsonDataToDoris(int dataSize) {
-        return dataLoadService.sinkDataWithJSON(dataSize);
+public class StreamLoadException extends Exception {
+    public StreamLoadException() {
+        super();
     }
 
-    @RequestMapping("/insert/csv")
-    @ResponseBody
-    public String insertCsvDataToDoris(int dataSize) {
-        return dataLoadService.sinkDataWithCSV(dataSize);
+    public StreamLoadException(String message) {
+        super(message);
+    }
+
+    public StreamLoadException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public StreamLoadException(Throwable cause) {
+        super(cause);
+    }
+
+    protected StreamLoadException(String message, Throwable cause,
+                                  boolean enableSuppression,
+                                  boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 }
+

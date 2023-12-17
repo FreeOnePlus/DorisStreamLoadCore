@@ -14,28 +14,33 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-package com.doris.streamload.demo.conf;
+package org.apache.doris.streamload.core.params;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.stereotype.Repository;
 
 /**
- * This Config Bean should have all Doris Params.
+ * The necessary parameters for using StreamLoad to connect to
+ * Doris can be obtained from the ‘DorisConfig’ configuration class.
  */
 @Getter
 @Setter
-@Repository
-@AllArgsConstructor
 @NoArgsConstructor
-public class DorisConfig {
-    private String host = "139.9.207.36"; // Host
-    private int httpPort = 59371; // HTTP Port
-    private String database = "demo"; // Database
-    private String table = "app_log"; // Table
-    private String username = "admin"; // Doris Username
-    private String password = "Syj123456"; // Doris Password
+@AllArgsConstructor
+public class DorisContentParams {
+    // FE or BE Host
+    private String host;
+    // If Host Param is FE Host, Please use fe-http-port, Default value 8030.
+    // If Host Param is BE Host, Please use be-http-port, Default value 8040.
+    private int httpPort;
+    // Write to target database
+    private String database;
+    // Write to target table
+    private String table;
+    // Doris login username
+    private String userName;
+    // Doris login password
+    private String password;
 }

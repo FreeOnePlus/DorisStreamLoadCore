@@ -16,17 +16,17 @@
 // under the License.
 package com.doris.streamload.demo.services.impl;
 
+import com.doris.streamload.core.exception.StreamLoadException;
 import com.doris.streamload.demo.beans.DataBean;
 import com.doris.streamload.demo.beans.DataValueEnums;
 import com.doris.streamload.demo.conf.DorisConfig;
+import com.doris.streamload.core.IConvertor;
+import com.doris.streamload.core.params.DorisContentParams;
+import com.doris.streamload.core.params.StreamLoadParams;
+import com.doris.streamload.core.params.StreamLoadResult;
+import com.doris.streamload.core.StreamLoad;
 import com.doris.streamload.demo.services.DataLoadService;
 import com.doris.streamload.demo.services.impl.convertor.IConvertorImpl;
-import org.apache.doris.streamload.core.IConvertor;
-import org.apache.doris.streamload.core.StreamLoad;
-import org.apache.doris.streamload.core.exception.StreamLoadException;
-import org.apache.doris.streamload.core.params.DorisContentParams;
-import org.apache.doris.streamload.core.params.StreamLoadParams;
-import org.apache.doris.streamload.core.params.StreamLoadResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
