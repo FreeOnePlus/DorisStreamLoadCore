@@ -14,13 +14,13 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-package org.doris.streamload.core;
+package org.apache.doris.streamload.core;
 
-import org.doris.streamload.core.exception.StreamLoadException;
-import org.doris.streamload.core.input.StreamLoadInputStream;
-import org.doris.streamload.core.params.StreamLoadParams;
-import org.doris.streamload.core.params.DorisContentParams;
-import org.doris.streamload.core.params.StreamLoadResult;
+import org.apache.doris.streamload.core.exception.StreamLoadException;
+import org.apache.doris.streamload.core.params.DorisContentParams;
+import org.apache.doris.streamload.core.input.StreamLoadInputStream;
+import org.apache.doris.streamload.core.params.StreamLoadParams;
+import org.apache.doris.streamload.core.params.StreamLoadResult;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
