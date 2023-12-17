@@ -14,7 +14,7 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-package com.doris.streamload.core;
+package org.doris.streamload.core;
 
 /**
  * The Convertor interface currently supports three import methods of CSV and one import method of JSON.
