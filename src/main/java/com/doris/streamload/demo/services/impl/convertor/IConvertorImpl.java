@@ -17,10 +17,10 @@
 package com.doris.streamload.demo.services.impl.convertor;
 
 import com.doris.streamload.demo.beans.DataBean;
-import com.doris.streamload.core.IConvertor;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.apache.doris.streamload.core.IConvertor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

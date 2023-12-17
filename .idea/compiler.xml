@@ -7,9 +7,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="StreamLoad" />
+        <module name="streamload-core" />
         <module name="doris-streamload-sdk" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="StreamLoad" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
