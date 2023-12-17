@@ -32,10 +32,10 @@ import org.springframework.stereotype.Repository;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DorisConfig {
-    private String host = "139.9.207.36"; // Host
-    private int httpPort = 59371; // HTTP Port
-    private String database = "demo"; // Database
-    private String table = "app_log"; // Table
-    private String username = "admin"; // Doris Username
-    private String password = "Syj123456"; // Doris Password
+    private String host = ""; // Host
+    private int httpPort = 8030; // HTTP Port
+    private String database = ""; // Database
+    private String table = ""; // Table
+    private String username = ""; // Doris Username
+    private String password = ""; // Doris Password
 }
