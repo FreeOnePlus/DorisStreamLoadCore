@@ -14,13 +14,13 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-package com.doris.streamload.core;
+package org.apache.doris.streamload.core;
 
-import com.doris.streamload.core.exception.StreamLoadException;
-import com.doris.streamload.core.input.StreamLoadInputStream;
-import com.doris.streamload.core.params.StreamLoadParams;
-import com.doris.streamload.core.params.DorisContentParams;
-import com.doris.streamload.core.params.StreamLoadResult;
+import org.apache.doris.streamload.core.exception.StreamLoadException;
+import org.apache.doris.streamload.core.input.StreamLoadInputStream;
+import org.apache.doris.streamload.core.params.StreamLoadParams;
+import org.apache.doris.streamload.core.params.DorisContentParams;
+import org.apache.doris.streamload.core.params.StreamLoadResult;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -38,12 +38,11 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-@Repository
+
 public class StreamLoad {
     private static final Logger log = LoggerFactory.getLogger(StreamLoad.class);
     private StreamLoadResult streamLoadResult;

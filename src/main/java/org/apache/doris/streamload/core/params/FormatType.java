@@ -1,4 +1,4 @@
-package com.doris.streamload.core.params;
+package org.apache.doris.streamload.core.params;
 
 import lombok.Getter;
 
