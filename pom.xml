@@ -6,6 +6,11 @@
     <groupId>io.github.freeoneplus</groupId>
     <artifactId>streamload-core</artifactId>
     <version>0.1.0</version>
+    <name>doris-streamload-sdk</name>
+    <description>
+        Apache Doris Streamload SDK.
+    </description>
+    <url>https://github.com/FreeOnePlus/doris-streamload-sdk.git</url>
     <properties>
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
