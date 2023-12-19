@@ -1,0 +1,28 @@
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+        <modelVersion>4.0.0</modelVersion>
+    <groupId>org.apache.doris</groupId>
+    <artifactId>doris-streamload-sdk-maven-demo</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <name>doris-streamload-sdk-maven-demo</name>
+    <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>io.github.freeoneplus</groupId>
+            <artifactId>streamload-core</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+    </dependencies>
+</project>
