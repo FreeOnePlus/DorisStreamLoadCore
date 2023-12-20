@@ -20,12 +20,12 @@ public class StreamLoadDemo {
 
     private DorisContentParams getDorisContentParams() {
         return new DorisContentParams(
-                "127.0.0.1"
-                , 8030
+                "139.9.207.36"
+                , 59371
                 , "demo"
-                , "app_log"
-                , "root"
-                , ""
+                , "user_basic"
+                , "admin"
+                , "Syj123456"
         );
     }
 
@@ -53,7 +53,8 @@ public class StreamLoadDemo {
     }
 
     public StreamLoadResult loadJsonData() {
-        String jsonStr = "{id=1,name=\"张三\",age=17}";
+        String jsonStr = "{\"id\":1,\"name\":\"张x01三\",\"age\":17}";
+
         try {
             StreamLoad streamLoad = new StreamLoad(convertor);
             StreamLoadResult streamLoadResult = streamLoad.run(jsonStr, dorisContentParams
