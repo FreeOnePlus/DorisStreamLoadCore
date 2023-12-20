@@ -44,6 +44,7 @@ public class DataLoadServiceImpl implements DataLoadService {
     DorisConfig dorisConfig;
     private static final Logger log = LoggerFactory.getLogger(DataLoadServiceImpl.class);
     private int batchSize = 100000;
+    private int batchTime = 10000;
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private List<DataBean> dataList = new ArrayList<>();
 
@@ -87,9 +88,11 @@ public class DataLoadServiceImpl implements DataLoadService {
         // 2. Create the parameter object 'StreamLoadParams' when importing using StreamLoad this time,
         // and set the corresponding parameters.
         StreamLoadResult streamLoadResult = new StreamLoadResult();
+        long beginTime = System.currentTimeMillis();
         for (int i = 0; i < dataSize; i++) {
             dataList.add(sourceData());
-            if ((i != 0 && i % batchSize == 0) || (i + 1 == dataSize)) {
+            long lastTime = System.currentTimeMillis();
+            if ((i != 0 && i % batchSize == 0) || (i + 1 == dataSize) || lastTime - beginTime >= batchTime) {
                 StreamLoadParams build = new StreamLoadParams.Builder()
                         .setFormat("json")
                         .setFuzzyParse("true")
@@ -103,6 +106,7 @@ public class DataLoadServiceImpl implements DataLoadService {
                 }
                 dataList.clear();
                 log.info(streamLoadResult.toString());
+                beginTime = lastTime;
             }
         }
         long endTime = System.currentTimeMillis();
@@ -123,9 +127,11 @@ public class DataLoadServiceImpl implements DataLoadService {
         // 2. Create the parameter object 'StreamLoadParams' when importing using StreamLoad this time,
         // and set the corresponding parameters.
         StreamLoadResult streamLoadResult = new StreamLoadResult();
+        long beginTime = System.currentTimeMillis();
         for (int i = 0; i < dataSize; i++) {
             dataList.add(sourceData());
-            if ((i != 0 && i % batchSize == 0) || (i + 1 == dataSize)) {
+            long lastTime = System.currentTimeMillis();
+            if ((i != 0 && i % batchSize == 0) || (i + 1 == dataSize) || lastTime - beginTime >= batchTime) {
                 StreamLoadParams build = new StreamLoadParams.Builder()
                         .setFormat("csv")
                         .setColumnSeparator(",")
@@ -137,6 +143,7 @@ public class DataLoadServiceImpl implements DataLoadService {
                 }
                 dataList.clear();
                 log.info(streamLoadResult.toString());
+                beginTime = lastTime;
             }
         }
         long endTime = System.currentTimeMillis();
